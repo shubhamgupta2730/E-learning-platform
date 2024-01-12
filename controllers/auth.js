@@ -2,6 +2,10 @@ const User = require("../models/user");
 const OTP = require("../models/OTP");
 const otpGenerator = require("otp-generator");
 const bcrypt = require("bcryptjs");
+const jwt = require("jsonwebtoken");
+require('dotenv').config();
+
+
 
 
 
@@ -182,6 +186,93 @@ exports.signup = async (req, res) => {
 
 //login:
 
+exports.login = async (req, res) => {
+  try {
+    //get data from req body
+    const { email, password } = req.body;
+
+    //validation of data
+
+    if (!email || !password) {
+      res.status(403).json({
+        success: false,
+        message: "All fields are required, try again!!",
+      });
+    }
+
+    //check user exist or not
+
+    const user = await User.findOne({ email }).populate("additionalDetails");
+    if (!users) {
+      return res.status(401).json({
+        success: false,
+        message: "user is not registered , please register first!!",
+      });
+    }
+
+    //match password
+    if (await bcrypt.compare(password, user.password)) {
+      const payload = {
+        email: user.email,
+        id: user._id,
+        accountType: user.accountType,
+      }
+      //generate jwt token
+      const token = jwt.sign(payload, process.env.JWT_SECRET, {
+        expiresIn: "2h",
+
+      });
+      user.token = token;
+      user.password = undefined;
+
+
+
+
+      //create cookie 
+      const options = {
+        expires: new Date(Date.now() + 3 * 24 * 60 * 60 * 1000),
+        httpOnly: true,
+      }
+      res.cookie("token", token, options).status(200).json({
+        success: true,
+        token,
+        user,
+      })
+
+
+
+    }
+    //send response
+    else {
+      return res.status(401).json({
+        success: false,
+        message: "password is incorrect",
+      });
+
+    }
+  }
+
+  catch (error) {
+    console.log(error);
+    return res.status(500).json({
+      success: false,
+      message: "Login failure, try again!!",
+    });
+
+
+  }
+}
+
+
+
 
 //changePassword: 
+exports.changePassword = async (req, res) => {
+  //get data from req body
+  //get old password, newPassword, and confirm password
+  //validation
+  //update password in database
+  //send mail for password update
+  //return response
+}
 
