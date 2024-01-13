@@ -13,7 +13,7 @@ exports.auth = async (req, res, next) => {
     if (!token) {
       return res.status(401).json({
         success: false,
-        message: "Token is missing!!",
+        message: "Token is missing , please try again",
       });
     }
     //verify the token 
@@ -25,7 +25,7 @@ exports.auth = async (req, res, next) => {
     catch(error){
       return res.status(401).json({
         success: false,
-        message: "TOken is invalid",
+        message: "Token is invalid , please try again",
       });
     }
     next();
@@ -34,7 +34,7 @@ exports.auth = async (req, res, next) => {
   } catch (error) {
     return res.status(401).json({
       success : false,
-      message: "something went wrong while validating the token",
+      message: "something went wrong while validating the token , please try again",
     });
 
   }
@@ -47,14 +47,14 @@ exports.isStudent = async(req, res, next){
   if(req.user.accountType!== "Student"){
     return res.status(401).json({
       success: false,
-      message: "this is route for student only!!",
+      message: "this is route for student only !!!",
     });
   }
     
   } catch (error) {
     return res.status(500).json({
       success: false,
-      message: "User role cannot be verified, try again",
+      message: "User role cannot be verified, try again later",
     });
     
   }
@@ -68,7 +68,7 @@ exports.isInstructor = async(req, res, next){
     if(req.user.accountType!== "Instructor"){
       return res.status(401).json({
         success: false,
-        message: "this route is for instructors only!!!",
+        message: "this route is for instructors only !!!",
       });
     }
     next();
@@ -76,7 +76,7 @@ exports.isInstructor = async(req, res, next){
   } catch (error) {
     return res.status(500).json({
       success: false,
-      message: "instructor role cannot be verirfied!!",
+      message: "instructor role cannot be verified!!",
     });
     
   }

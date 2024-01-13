@@ -14,12 +14,12 @@ exports.resetPasswordToken = async (req, res) => {
     if (!user) {
       return res.status(401).json({
         success: false,
-        message: "Email is not registered!!!",
+        message: "Email is not registered , please register first!!",
       });
     }
     //generate token
     const token = crypto.randomUUID();
-    //update user by adding token and expiratin time
+    //update user by adding token and expiration time
     const updateDetails = await user.findOneAndUpdate({ email: email },
       {
         token: token,
@@ -38,15 +38,15 @@ exports.resetPasswordToken = async (req, res) => {
     //return response
     return res.status(200).json({
       success: true,
-      message: "Email sent successfully",
+      message: "Email sent successfully for reset password, please check your mail and reset password",
     });
 
 
   } catch (error) {
-    console.log("reset password email not sent", error);
+    console.log("reset password email not sent ", error);
     return res.status(500).json({
       success: false,
-      message: "something went wrong,while reset!!!",
+      message: "something went wrong,while reset !!! try again later",
     });
 
   }
@@ -54,7 +54,20 @@ exports.resetPasswordToken = async (req, res) => {
 
 }
 
-//reset password 
+
+
+
+//reset password Controller:
+
+//data fetch from req body
+//validation of data
+//get user details from db using token 
+//hash password 
+//update password
+//return response
+
+
+
 
 exports.resetpassword = async (req, res) => {
   try {
@@ -64,17 +77,17 @@ exports.resetpassword = async (req, res) => {
     if (password !== confirmPassword) {
       return res.json({
         success: false,
-        message: "Password not matching",
+        message: "Password not matching with confirm password , please try again",
       });
 
     }
-    //get user detials from db using token
+    //get user details from db using token
     const userDetails = await User.findOne({ token: token });
     //if no entry, means invalid token
     if (!userDetails) {
       return res.status(400).json({
         success: false,
-        message: "Token is invalid",
+        message: "Token is invalid , please try again",
       });
 
     }
@@ -82,7 +95,7 @@ exports.resetpassword = async (req, res) => {
     if (userDetails.resetPasswordExpires < Date.now()) {
       return res.json({
         success: false,
-        message: "Token is expired!!!, please regenerate token",
+        message: "Token is expired!!!, please regenerate token and try again",
       });
     }
 
@@ -97,18 +110,18 @@ exports.resetpassword = async (req, res) => {
       { new: true },
 
     );
-    //reutrn response
+    //return response
     return res.status(200).json({
       success: true,
-      message: "Reset Successfull",
+      message: "Reset Successful , please login again",
 
     });
   }
   catch (error) {
-    console.log("Reset password Unsuccessful: ", error);
+    console.log("Reset password Unsuccessful  ", error);
     return res.status(500).json({
       success: false,
-      message: "Password is not reset, try again!!!",
+      message: "Password is not reset, try again later",
 
     });
 
