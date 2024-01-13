@@ -3,6 +3,7 @@ const OTP = require("../models/OTP");
 const otpGenerator = require("otp-generator");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
+const mailSender = require("../utils/mailSender");
 require('dotenv').config();
 
 
@@ -257,7 +258,7 @@ exports.login = async (req, res) => {
 
       //create cookie
       // a cookie is being created to store the JWT (JSON Web Token) for the user. The cookie will be sent to the client and stored there. The client will then send the cookie back to the server with every request, so the server can verify the JWT and identify the user.
-      
+
       //creating option object for cookie
       const options = {
         //expires in 3 days
@@ -299,12 +300,59 @@ exports.login = async (req, res) => {
 
 
 //changePassword: 
+
 exports.changePassword = async (req, res) => {
   //get data from req body
   //get old password, newPassword, and confirm password
   //validation
+  //hash password
   //update password in database
   //send mail for password update
   //return response
+
+
+  try {
+    //get data from req body
+    const { oldPassword, newPassword } = req.body;
+
+    //validation
+    if (!oldPassword || !newPassword) {
+      return res.status(403).json({
+        success: false,
+        message: "All fields are required, try again!!",
+      });
+    }
+
+    //hash password
+    const hashedPassword = await bcrypt.hash(newPassword, 10);
+
+    //update password in database
+    await User.findOneAndUpdate(
+      // {email}, 
+      { password: hashedPassword },
+      { new: true }
+    )
+
+    //send mail for password update
+    await mailSender(email, "Password changed for your account", "Successfully changed your system password.");
+
+    //return response
+    return res.status(201).json({
+      success: true,
+      message: "Password changed successfully",
+    });
+
+
+
+
+  } catch (error) {
+    console.log("Error changing password: ", error.message);
+    return res.status(500).json({
+      success: false,
+      message: "Password has not changed, try again!!",
+    })
+
+  }
 }
+
 
