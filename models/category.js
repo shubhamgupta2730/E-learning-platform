@@ -1,6 +1,9 @@
 const mongoose = require("mongoose");
 
-const tagsSchema = new mongoose.Schema({
+
+//TODO:update:  convert tag into category of course,,,,!!!
+
+const categorySchema = new mongoose.Schema({
   name: {
     type: String,
     required: true,
@@ -16,4 +19,4 @@ const tagsSchema = new mongoose.Schema({
 
 });
 
-module.exports = mongoose.model("Tag", tagsSchema);
+module.exports = mongoose.model("Category", categorySchema);
