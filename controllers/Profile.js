@@ -35,7 +35,7 @@ exports.updateProfile = async (req, res) => {
     profileDetails.about = about;
     profileDetails.gender = gender;
     profileDetails.contactNumber = contactNumber;
-    //becoz object already bana hua hai to bs save krna hai is method se,,,
+    //because object already create hua hai to bs save krna hai is method se,,,
 
     await profileDetails.save();
 
