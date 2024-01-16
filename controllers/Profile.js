@@ -60,7 +60,7 @@ exports.updateProfile = async (req, res) => {
 
 
 
-//delete account----------
+//delete account Controller function----------
 
 exports.deleteAccount = async (req, res) => {
   try {
@@ -88,7 +88,7 @@ exports.deleteAccount = async (req, res) => {
     //delete profile of that user first
     await Profile.findByIdAndDelete({ _id: userDetails.additionalDetails });
     //delete user
-    await User.findByIdAndDelete(_id: id);
+    await User.findByIdAndDelete({_id: id});
     //return response
     return res.status(200).json({
       success: true,
@@ -113,11 +113,17 @@ exports.getUserDetails = async(req, res)=>{
     const id = req.user.id;
 
     //get userDetails:
-    const userDetails = await User.findById(id).populate("additionalDetails").exec();
+    const userDetails = await User.findById(id).populate("additionalDetails").exec(1);
 
 
 
     //validation
+    if(!userDetails){
+      return res.status(400).json({
+        success: false,
+        message: "User details not found!!!",
+      });
+    }
 
     //return response:
     return res.status(200).json({

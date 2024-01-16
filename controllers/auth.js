@@ -7,7 +7,7 @@ const mailSender = require("../utils/mailSender");
 require('dotenv').config();
 
 
-//sendOTP:
+//sendOTP Controller:
 exports.sendOTP = async (req, res) => {
   //fetch email from request body
   try {
@@ -299,7 +299,7 @@ exports.login = async (req, res) => {
 
 
 
-//changePassword: 
+//changePassword Controller: 
 
 exports.changePassword = async (req, res) => {
   //get data from req body

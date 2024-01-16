@@ -91,6 +91,9 @@ exports.updateSection = async (req, res) => {
     });
   }
 }
+
+
+
 //delete section:-----------
 
 exports.deleteSection = async (req, res) => {
@@ -106,7 +109,7 @@ exports.deleteSection = async (req, res) => {
 
     await Section.findByIdAndDelete(sectionId);
 
-    //TODO: delete id OF section from courseSchema: 
+    //TODO: delete id of section from courseSchema: 
 
 
     //return response

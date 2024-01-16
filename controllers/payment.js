@@ -74,7 +74,7 @@ exports.capturePayment = async (req, res) => {
     return res.status(200).json({
       success: true,
       courseName: Course.courseName,
-      courseDescrtiption: Course.courseDescrtiption,
+      courseDescription: Course.courseDescrtiption,
       thumbnail: Course.thumbnail,
       orderId: paymentResponse.id,
       currency: paymentResponse.currency,
@@ -150,6 +150,7 @@ exports.verifySignature = async (req, res) => {
       console.log(enrolledCourse);
 
       //find the student and add course to their list of enrolled courses: 
+      
       const enrolledStudent = await User.findOneAndUpdate(
         { _id: userId },
         { $push: { courses: courseId } },
@@ -161,7 +162,7 @@ exports.verifySignature = async (req, res) => {
       const emailResponse = await mailSender(
         enrolledStudent.email,
         "Congratulations from portal",
-        "Congratulations, you are onboarded into course",
+        "Congratulations, you are onboard into course",
       )
       console.log(emailResponse);
 
@@ -181,7 +182,7 @@ exports.verifySignature = async (req, res) => {
   else{
     return res.status(400).json({
       success: false,
-      message: "INvalid request",
+      message: "Invalid request",
     });
   }
 
