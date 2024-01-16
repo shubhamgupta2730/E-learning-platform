@@ -1,4 +1,7 @@
 const Category = require("../models/category");
+function getRandomInt(max) {
+  return Math.floor(Math.random() * max)
+}
 
 //create category ka handler function::--
 
@@ -49,10 +52,11 @@ exports.createCategory = async (req, res) => {
 
 exports.showAllCategories = async (req, res) => {
   try {
-    const allCategories = await Category.find({}, { name: true, description: true });
+    const allCategories = await Category.find({});
     return res.status(200).json({
       success: true,
-      message: "All categories returned successfully."
+      message: "All categories returned successfully.",
+      data: allCategories,
     });
 
   } catch (error) {
@@ -75,7 +79,11 @@ exports.categoryPageDetails = async (req, res) => {
 
     //gt courses for specified category id: 
     const selectedCourses = await Category.findById({ _id: categoryId })
-      .populate("courses").exec();
+      .populate({
+        path: "courses",
+        match: { status: "Published" },
+        populate: "ratingAndReviews",
+      }).exec();
 
 
     //validation:
@@ -129,3 +137,4 @@ exports.categoryPageDetails = async (req, res) => {
 
 
   }
+}

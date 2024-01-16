@@ -2,6 +2,10 @@ const Course = require("../models/Course");
 const Category = require("../models/category");
 const User = require("../models/user");
 const { uploadImageToCloudinary } = require("../utils/imageUploader");
+const CourseProgress = require("../models/CourseProgress");
+const { convertSecondsToDuration } = require("../utils/secToDuration");
+const Section = require("../models/Section");
+const SubSection = require("../models/SubSection");
 
 ///1. create course handler function------
 
