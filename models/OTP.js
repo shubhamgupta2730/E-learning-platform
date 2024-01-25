@@ -30,7 +30,14 @@ async function sendVerificationEmail(email, otp) {
       "Verification Email",
       emailTemplate(otp)
     );
-    console.log("Email sent successfully: ", mailResponse.response);
+    // Check if mailResponse is defined
+    if (!mailResponse) {
+      console.log('mailResponse is undefined');
+    } else if (!mailResponse.response) {
+      console.log('mailResponse.response is undefined');
+    } else {
+      console.log("Email sent successfully: ", mailResponse.response);
+    }
   } catch (error) {
     console.log("Error occurred while sending email: ", error);
     throw error;

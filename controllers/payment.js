@@ -96,7 +96,7 @@ exports.capturePayment = async (req, res) => {
 
 //? VERIFY SIGNATURE  ****
 
-exports.verifySignature = async (req, res) => {
+exports.verifyPayment = async (req, res) => {
 
   //server data(secret key): 
   const webhookSecret = "12345678";
@@ -150,7 +150,7 @@ exports.verifySignature = async (req, res) => {
       console.log(enrolledCourse);
 
       //find the student and add course to their list of enrolled courses: 
-      
+
       const enrolledStudent = await User.findOneAndUpdate(
         { _id: userId },
         { $push: { courses: courseId } },
@@ -179,7 +179,7 @@ exports.verifySignature = async (req, res) => {
 
     }
   }
-  else{
+  else {
     return res.status(400).json({
       success: false,
       message: "Invalid request",
@@ -188,3 +188,37 @@ exports.verifySignature = async (req, res) => {
 
 
 }
+
+// Send Payment Success Email
+exports.sendPaymentSuccessEmail = async (req, res) => {
+  const { orderId, paymentId, amount } = req.body
+
+  const userId = req.user.id
+
+  if (!orderId || !paymentId || !amount || !userId) {
+    return res
+      .status(400)
+      .json({ success: false, message: "Please provide all the details" })
+  }
+
+  try {
+    const enrolledStudent = await User.findById(userId)
+
+    await mailSender(
+      enrolledStudent.email,
+      `Payment Received`,
+      paymentSuccessEmail(
+        `${enrolledStudent.firstName} ${enrolledStudent.lastName}`,
+        amount / 100,
+        orderId,
+        paymentId
+      )
+    )
+  } catch (error) {
+    console.log("error in sending mail", error)
+    return res
+      .status(400)
+      .json({ success: false, message: "Could not send email" })
+  }
+}
+

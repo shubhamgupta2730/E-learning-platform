@@ -1,3 +1,4 @@
+const { Mongoose } = require("mongoose");
 const Category = require("../models/category");
 function getRandomInt(max) {
   return Math.floor(Math.random() * max)
@@ -18,6 +19,7 @@ exports.createCategory = async (req, res) => {
         message: "All fields are required!!",
       });
     }
+
 
     //create entry in db: 
     const categoryDetails = await Category.create({
@@ -52,6 +54,7 @@ exports.createCategory = async (req, res) => {
 
 exports.showAllCategories = async (req, res) => {
   try {
+    console.log("INSIDE SHOW ALL CATEGORIES");
     const allCategories = await Category.find({});
     return res.status(200).json({
       success: true,
@@ -74,8 +77,7 @@ exports.categoryPageDetails = async (req, res) => {
 
     //get category id:
     const { categoryId } = req.body;
-
-
+    console.log("PRINTING CATEGORY ID: ", categoryId);
 
     //gt courses for specified category id: 
     const selectedCourses = await Category.findById({ _id: categoryId })
@@ -88,10 +90,20 @@ exports.categoryPageDetails = async (req, res) => {
 
     //validation:
     if (!selectedCourses) {
+      console.log("Category not found.")
       return res.status(404).json({
         success: false,
         message: "No courses found for this category",
       });
+    }
+
+    // Handle the case when there are no courses
+    if (selectedCategory.courses.length === 0) {
+      console.log("No courses found for the selected category.")
+      return res.status(404).json({
+        success: false,
+        message: "No courses found for the selected category.",
+      })
     }
 
     //get courses for different category:

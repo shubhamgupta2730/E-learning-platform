@@ -100,9 +100,10 @@ exports.signup = async (req, res) => {
       password,
       confirmPassword,
       accountType,
-      contactNumber,
+      // contactNumber,
       otp
     } = req.body;
+    console.log("req.body: ", req.body);
 
     //data validate
     if (!firstName || !lastName || !email || !password || !confirmPassword || !otp) {
@@ -112,6 +113,7 @@ exports.signup = async (req, res) => {
 
       });
     }
+
 
 
     // dono password ko match kr lo :
@@ -158,6 +160,8 @@ exports.signup = async (req, res) => {
     const hashedPassword = await bcrypt.hash(password, 10);
 
     //entry create in db
+    let approved = ""
+    approved = accountType === "Instructor" ? (approved = false) : (approved = true);
 
     //create addItionAL details for user:--
     const profileDetails = await Profile.create({
@@ -172,9 +176,10 @@ exports.signup = async (req, res) => {
       firstName,
       lastName,
       email,
-      contactNumber,
+      // contactNumber,
       password: hashedPassword,
       accountType,
+      approved: approved,
 
       //we have to give object id of profile in additional details, so created an function profileDetails
 
@@ -251,7 +256,7 @@ exports.login = async (req, res) => {
 
       //The sign method takes three arguments: the payload of the token, the secret key to sign the token, and an options object.
       const token = jwt.sign(payload, process.env.JWT_SECRET, {
-        expiresIn: "2h",
+        expiresIn: "24h",
 
       });
       user.token = token;
@@ -315,6 +320,7 @@ exports.changePassword = async (req, res) => {
   //return response
 
 
+
   try {
     const userDetails = await User.findById(req.user.id)
     //get data from req body
@@ -336,7 +342,7 @@ exports.changePassword = async (req, res) => {
     const hashedPassword = await bcrypt.hash(newPassword, 10);
 
     //update password in database
-    const updatedUserDetails = await User.findOneAndUpdate(
+    const updatedUserDetails = await User.findByIdAndUpdate(
       req.user.id,
       { password: hashedPassword },
       { new: true }

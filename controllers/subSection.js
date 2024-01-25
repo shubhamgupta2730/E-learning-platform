@@ -122,7 +122,7 @@ exports.updateSubSection = async (req, res) => {
 
 //delete subsection:--------------
 
-const deleteSubSection = async (req, res) => {
+exports.deleteSubSection = async (req, res) => {
   try {
     //get id
     //use findbyid and delete

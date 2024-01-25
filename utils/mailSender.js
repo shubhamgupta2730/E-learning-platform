@@ -6,9 +6,10 @@ const mailSender = async (email, title, body) => {
     let transporter = nodeMailer.createTransport({
       //this function takes info of host and user to send mail form env file
       host: process.env.MAIL_HOST,
+      port:587,
       auth: {
         user: process.env.MAIL_USER,
-        Pass: process.env.MAIL_PASS,
+        pass: process.env.MAIL_PASS,
       }
     })
 
@@ -25,7 +26,7 @@ const mailSender = async (email, title, body) => {
 
 
   } catch (error) {
-    console.log("Mail is not sent",error.message);
+    console.log("Mail is not sent", error.message);
 
   }
 }
