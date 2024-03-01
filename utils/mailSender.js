@@ -1,34 +1,28 @@
-const { default: mongoose } = require("mongoose");
-const nodeMailer = require("nodemailer");
+const nodemailer = require("nodemailer")
 
 const mailSender = async (email, title, body) => {
   try {
-    let transporter = nodeMailer.createTransport({
-      //this function takes info of host and user to send mail form env file
+    let transporter = nodemailer.createTransport({
       host: process.env.MAIL_HOST,
-      port:587,
       auth: {
         user: process.env.MAIL_USER,
         pass: process.env.MAIL_PASS,
-      }
+      },
+      secure: false,
     })
 
     let info = await transporter.sendMail({
-      //it is used to send email
-      from: 'E-Learning Platform',
-      to: `${email}`,
-      subject: `${title}`,
-      html: `${body}`,
+      from: `"Online Course Portal" <${process.env.MAIL_USER}>`, // sender address
+      to: `${email}`, // list of receivers
+      subject: `${title}`, // Subject line
+      html: `${body}`, // html body
     })
-    console.log(info);
-    //if mail is sent successfully , then it returns the information
-    return info;
-
-
+    console.log(info.response)
+    return info
   } catch (error) {
-    console.log("Mail is not sent", error.message);
-
+    console.log(error.message)
+    return error.message
   }
 }
 
-module.exports = mailSender;
+module.exports = mailSender

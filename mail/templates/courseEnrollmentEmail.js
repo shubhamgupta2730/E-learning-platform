@@ -1,10 +1,10 @@
-exports.passwordUpdated = (email, name) => {
+exports.courseEnrollmentEmail = (courseName, name) => {
     return `<!DOCTYPE html>
     <html>
     
     <head>
         <meta charset="UTF-8">
-        <title>Password Update Confirmation</title>
+        <title>Course Registration Confirmation</title>
         <style>
             body {
                 background-color: #ffffff;
@@ -40,6 +40,18 @@ exports.passwordUpdated = (email, name) => {
                 margin-bottom: 20px;
             }
     
+            .cta {
+                display: inline-block;
+                padding: 10px 20px;
+                background-color: #FFD60A;
+                color: #000000;
+                text-decoration: none;
+                border-radius: 5px;
+                font-size: 16px;
+                font-weight: bold;
+                margin-top: 20px;
+            }
+    
             .support {
                 font-size: 14px;
                 color: #999999;
@@ -55,19 +67,18 @@ exports.passwordUpdated = (email, name) => {
     
     <body>
         <div class="container">
-            <a href="https://studynotion-edtech-project.vercel.app"><img class="logo"
-                    src="https://i.ibb.co/7Xyj3PC/logo.png" alt="StudyNotion Logo"></a>
-            <div class="message">Password Update Confirmation</div>
+          
+            <div class="message">Course Registration Confirmation</div>
             <div class="body">
-                <p>Hey ${name},</p>
-                <p>Your password has been successfully updated for the email <span class="highlight">${email}</span>.
+                <p>Dear ${name},</p>
+                <p>You have successfully registered for the course <span class="highlight">"${courseName}"</span>. We
+                    are excited to have you as a participant!</p>
+                <p>Please log in to your learning dashboard to access the course materials and start your learning journey.
                 </p>
-                <p>If you did not request this password change, please contact us immediately to secure your account.</p>
+                <a class="cta" href="PROJECT LINK: ">Go to Dashboard</a>
             </div>
-            <div class="support">If you have any questions or need further assistance, please feel free to reach out to us
-                at
-                <a href="mailto:virtualshubham2730@gmail.com">virtualshubham2730@gmail.com</a>. We are here to help!
-            </div>
+            <div class="support">If you have any questions or need assistance, please feel free to reach out to us at <a
+                    href="mailto:virtualshubham2730@gmail.com">virtualshubham2730@gmail.com</a>. We are here to help!</div>
         </div>
     </body>
     
